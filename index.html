@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="./style.css">
+
+    <!-- Fontawersome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Drag And Drop</title>
+
+</head>
+
+<body>
+    <main>
+        <div class="row">
+            <div class="col col-12 col-sm-6">
+                <div class="drag-and-drop">
+                    <h1 class="drag-and-drop-title">Arrastra Tus Archivos AQUI</h1>
+                    <input class="input-drag-and-drop" type="file" multiple>
+                </div>
+                <button class="btn large"> Subir Archivos </button>
+            </div>
+            <div class="col col-12 col-sm-6 container">
+                <h1>Bienvenido a Ddrop</h1>
+                <p>Para subir tus archivos de forma simple a drive puedes ahcer Login a traves de Google</p>
+                <hr>
+                <button class="btn large" id="autorizar_btn" style="display: none;"><i class="fa-brands fa-google"></i> Login con Google</button>
+                <button class="btn large" id="desconectar_btn" style="display: none;"><i class="fa-brands fa-google"></i> Salir de Google</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cargar la api de google drive -->    
+
+    <script src="./index.js"></script>
+        
+    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
+    
+</body>
+
+</html>
