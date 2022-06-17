@@ -13,6 +13,14 @@ main{
     box-sizing: border-box;
 }
 
+.hide{
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
 .btn{
     background-color: var(--secondary);
     color: var(--text-color);
