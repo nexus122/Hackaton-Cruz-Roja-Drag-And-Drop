@@ -45,15 +45,6 @@ main{
     cursor: pointer;
     height: 50vh;
     margin-bottom: 3em;
-}
-
-.input-drag-and-drop{
-    height: 100%;
-    width: 100%;
-    position: relative;
-    cursor: pointer;
-    opacity: 0;
-}
-.drag-and-drop-title{
-    position: absolute;
+    padding: 1em;
+    overflow: auto;
 }

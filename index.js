@@ -1,92 +1,141 @@
-/* Login con Google */
-console.log("Se carga el documento");
+/* Selectores */
+const input = document.querySelector('input[type="file"]');
+const dragAndDrop = document.querySelector('.drag-and-drop');
+const dragTitle = document.querySelector(".drag-and-drop .drag-and-drop-title");
+/* Variables globales */
+let file = [];
 
-// Acá Pega el Cliente ID y el API Key que creaste 
-var CLIENT_ID = '302566275221-ios2j41f43i8ht25nhp3f83pg682o6ml.apps.googleusercontent.com';
-var API_KEY = 'AIzaSyA9mRG50bWF9F0u-ebzkDxadinh3c9jMYQ';
+/* Envio de Formulario */
+document.querySelector("form").addEventListener("submit", function (e) {
+  if (file.length == 0) return;
+  e.preventDefault();
+  e.stopPropagation();
 
-// Cargamos el servicio Rest API de Google 
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+  // Recorremos los archivos y los volvemos a subir
+  file.forEach(element => {
+    insertFile(element);
+  });
+  insertFile(file);
+});
 
-// El servicio de Autenticación con una cuenta de Google 
-var SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+/* EVENTOS */
 
-// Seleccionamos los botones de Iniciar Sesión y Cerrar Sesión 
-var authorizeButton = document.getElementById('autorizar_btn');
-var signoutButton = document.getElementById('desconectar_btn');
+// Dragover: Cuando el elemento que arrastras esta encima del elemento que recibe el evento
+dragAndDrop.addEventListener("dragover", function (e) {
+  e.preventDefault();
+  e.stopPropagation();
 
+  dragTitle.innerHTML = "Suelta el Archivo";
+});
 
-function handleClientLoad() {
-    gapi.load('client:auth2', initClient);
+// Drop: Cuando sueltas el elemento dentro del div.
+dragAndDrop.addEventListener("drop", function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  // Hacemos un bucle para guardar en un array todos los archivos
+  let largo = e.dataTransfer.files.length;
+  for (let i = 0; i < largo; i++) {
+    if (file.some((f) => f.name.includes(e.dataTransfer.files[i].name))) continue;
+    file.push(e.dataTransfer.files[i]);    
+  }
+
+  console.log("Arr File = ", file);
+  draw();
+
+  dragTitle.innerHTML = "Arrastra Tus Archivos AQUI";
+});
+
+// Cuando haces click en el area de arrastrar archivos
+dragAndDrop.addEventListener("click", function (e) {
+  e.stopPropagation();
+  e.preventDefault();  
+  // Fingimos un click en el input para que se abra
+  if (file.length != 0) return;
+  input.click();
+})
+
+// Cuando nos cambia el contenido del input
+input.addEventListener("change", function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  let tempFiles = input.files;
+  console.log("Temp Files => ", tempFiles);
+
+  
+  let largo = tempFiles.length;
+  for (let i = 0; i < largo; i++) {
+    file.push(tempFiles[i]);    
+  }
+  draw();
+})
+
+/* Funciónes Generales */
+
+// Dibujar nombre de archivos
+function draw() {
+  dragAndDrop.innerHTML = "";
+  file.forEach((element, index) => {
+    // Creamos la linea
+    dragAndDrop.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;    
+  })  
 }
 
+// Podemos borrar un fila del array
+function deleteFile(fileId) {
+  console.log("Entramos en borrar");
+  file = file.filter((element, index) => {
+    if (index != fileId) return element;
+  })
+  console.log(file);
+  draw();
 
-function initClient() {
-    gapi.client.init({
-        apiKey: API_KEY,
-        clientId: CLIENT_ID,
-        discoveryDocs: DISCOVERY_DOCS,
-        scope: SCOPES
-    }).then(function () {
-
-        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        authorizeButton.onclick = handleAuthClick;
-        signoutButton.onclick = handleSignoutClick;
-    });
-}
-
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-        authorizeButton.style.display = 'none';
-        signoutButton.style.display = 'block';
-        //listFiles(); // Aqui si tienes sesion iniciada o entras pasa algo
-        uploadImage();
-    } else {
-        authorizeButton.style.display = 'block';
-        signoutButton.style.display = 'none';
-    }
-}
-
-
-function handleAuthClick(event) {
-    gapi.auth2.getAuthInstance().signIn();
-}
-
-function handleSignoutClick(event) {
-    gapi.auth2.getAuthInstance().signOut();
-}
-
-function appendPre(message) {
-    var pre = document.getElementById('root');
-    var textContent = document.createTextNode(message + '\n');
-    pre.appendChild(textContent);
+  // Si todos se han borrado deberiamos vovler a poner el texto
+  // if(!file) dragTitle.innerHTML = "Arrastra Tus Archivos AQUI";
 }
 
 /* Subir imagenes a Google Drive */
-function uploadImage(){    
-    var fileContent = 'sample text'; // As a sample, upload a text file.
+function insertFile(fileData, callback) {
+  // Configuración 
+  const boundary = '-------314159265358979323846';
+  const delimiter = "\r\n--" + boundary + "\r\n";
+  const close_delim = "\r\n--" + boundary + "--";
 
-    var file = new Blob([fileContent], { type: 'text/plain' });
-
-    var metadata = {
-        'name': 'sampleName', // Filename at Google Drive
-        'mimeType': 'text/plain', // mimeType at Google Drive
-        'parents': ['### folder ID ###'], // Folder ID at Google Drive
+  let reader = new FileReader();
+  reader.readAsBinaryString(fileData);
+  reader.onload = function (e) {
+    let contentType = fileData.type || 'application/octet-stream';
+    let metadata = {
+      'title': fileData.fileName,
+      'mimeType': contentType
     };
 
-    var accessToken = gapi.auth.getToken().access_token; // Here gapi is used for retrieving the access token.
-    var form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-    form.append('file', file);
+    let base64Data = btoa(reader.result);
+    let multipartRequestBody =
+      delimiter +
+      'Content-Type: application/json\r\n\r\n' +
+      JSON.stringify(metadata) +
+      delimiter +
+      'Content-Type: ' + contentType + '\r\n' +
+      'Content-Transfer-Encoding: base64\r\n' +
+      '\r\n' +
+      base64Data +
+      close_delim;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('post', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-    xhr.responseType = 'json';
-    xhr.onload = () => {
-        console.log(xhr.response.id); // Retrieve uploaded file ID.
-    };
-    xhr.send(form);
+    let request = gapi.client.request({
+      'path': '/upload/drive/v2/files',
+      'method': 'POST',
+      'params': { 'uploadType': 'multipart' },
+      'headers': {
+        'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+      },
+      'body': multipartRequestBody
+    });
+    if (!callback) {
+      callback = function (file) {
+        console.log(file)
+      };
+    }
+    request.execute(callback);
+  }
 }
