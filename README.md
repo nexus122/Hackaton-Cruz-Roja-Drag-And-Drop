@@ -14,6 +14,7 @@ Proyecto para crear una web App que permita subir de manera rapida documentos a 
 
 ## 🐛 Bugs
 - Al borrar todos los elementos, el ultimo click abre el input.
+- Error al enviar el form sin nada
 
 ## ✔️ Tareas:
 - [ ] Modificar la interfaz para que al borrar todo vuelva a la "normalidad".
