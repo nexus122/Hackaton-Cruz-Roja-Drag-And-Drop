@@ -19,7 +19,6 @@ document.querySelector("form").addEventListener("submit", function (e) {
 });
 
 /* EVENTOS */
-
 // Dragover: Cuando el elemento que arrastras esta encima del elemento que recibe el evento
 dragAndDrop.addEventListener("dragover", function (e) {
   e.preventDefault();
@@ -37,7 +36,7 @@ dragAndDrop.addEventListener("drop", function (e) {
   let largo = e.dataTransfer.files.length;
   for (let i = 0; i < largo; i++) {
     if (file.some((f) => f.name.includes(e.dataTransfer.files[i].name))) continue;
-    file.push(e.dataTransfer.files[i]);    
+    file.push(e.dataTransfer.files[i]);
   }
 
   console.log("Arr File = ", file);
@@ -49,7 +48,7 @@ dragAndDrop.addEventListener("drop", function (e) {
 // Cuando haces click en el area de arrastrar archivos
 dragAndDrop.addEventListener("click", function (e) {
   e.stopPropagation();
-  e.preventDefault();  
+  e.preventDefault();
   // Fingimos un click en el input para que se abra
   if (file.length != 0) return;
   input.click();
@@ -62,10 +61,10 @@ input.addEventListener("change", function (e) {
   let tempFiles = input.files;
   console.log("Temp Files => ", tempFiles);
 
-  
+
   let largo = tempFiles.length;
   for (let i = 0; i < largo; i++) {
-    file.push(tempFiles[i]);    
+    file.push(tempFiles[i]);
   }
   draw();
 })
@@ -77,8 +76,8 @@ function draw() {
   dragAndDrop.innerHTML = "";
   file.forEach((element, index) => {
     // Creamos la linea
-    dragAndDrop.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;    
-  })  
+    dragAndDrop.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;
+  })
 }
 
 // Podemos borrar un fila del array
@@ -102,11 +101,15 @@ function insertFile(fileData, callback) {
   const close_delim = "\r\n--" + boundary + "--";
 
   let reader = new FileReader();
-  reader.readAsBinaryString(fileData);
+  
+  try {
+    reader.readAsBinaryString(fileData);
+  } catch (e) { }
+
   reader.onload = function (e) {
     let contentType = fileData.type || 'application/octet-stream';
     let metadata = {
-      'title': fileData.fileName,
+      'title': fileData.fileName || fileData.name,
       'mimeType': contentType
     };
 
