@@ -1,7 +1,9 @@
 /* Selectores */
 const input = document.querySelector('input[type="file"]');
 const dragAndDrop = document.querySelector('.drag-and-drop');
-const dragTitle = document.querySelector(".drag-and-drop .drag-and-drop-title");
+const dragTitle = document.querySelector('.drag-and-drop-title');
+const files = document.querySelector('.files');
+
 /* Variables globales */
 let file = [];
 
@@ -73,11 +75,20 @@ input.addEventListener("change", function (e) {
 
 // Dibujar nombre de archivos
 function draw() {
-  dragAndDrop.innerHTML = "";
-  file.forEach((element, index) => {
-    // Creamos la linea
-    dragAndDrop.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;
+  dragTitle.style.display = "none";
+
+  // Limpiamos el area de archivos
+  files.innerHTML = "";
+
+  // Recorremos el array de archivos
+  file.forEach((element, index) => {    
+    // Escribimos el nombre junto a un icono de borrar el archivo
+    files.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;
   })
+
+  // Si no quedan archivos volvemos a mostrar el titulo
+  if(file.length == 0) dragTitle.style.display = "block";
+
 }
 
 // Podemos borrar un fila del array
