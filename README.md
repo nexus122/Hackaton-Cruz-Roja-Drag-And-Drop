@@ -3,6 +3,7 @@ Proyecto para crear una web App que permita subir de manera rapida documentos a 
 
 ## 📷 Screen Shoot
 ![image](https://user-images.githubusercontent.com/22988550/174437639-938b4266-1efb-40ee-8a90-04184b1c0aab.png)
+![image](https://user-images.githubusercontent.com/22988550/174437844-4ab6c4e4-4c7b-4d1c-9587-bc6fcbddd9f0.png)
 
 ## 🔷 Requisitos
 - Se debe poder iniciar y cerrar sesion en Google.
