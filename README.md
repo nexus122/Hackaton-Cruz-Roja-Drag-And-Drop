@@ -1,0 +1,23 @@
+# Hackaton-Cruz-Roja-Drag-And-Drop
+Proyecto para crear una web App que permita subir de manera rapida documentos a Google Drive.
+
+## 📷 Screen Shoot
+![image](https://user-images.githubusercontent.com/22988550/174437639-938b4266-1efb-40ee-8a90-04184b1c0aab.png)
+
+## 🔷 Requisitos
+- Se debe poder iniciar y cerrar sesion en Google.
+- Se debe poder arrastrar archivos a la "zona de arrastre" y que esta los acepte.
+- Se debe poder hacer click en la zona de arrastre para poder abrir un explorador y elegir archivos.
+- Se deben poder subir los archivos a Google Drive
+- Se deben poder eliminar archivos de un array antes de subirlos.
+
+## 🐛 Bugs
+- Al borrar todos los elementos, el ultimo click abre el input.
+
+## ✔️ Tareas:
+- [ ] Modificar la interfaz para que al borrar todo vuelva a la "normalidad".
+- [ ] Crear mensajes temporales.
+  - [ ] Introducir Archivos.
+  - [ ] Eliminar Archivos.
+  - [ ] Subir Archivos.
+  - [ ] Archivo no valido.
