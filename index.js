@@ -1,15 +1,21 @@
 /* Selectores */
 const input = document.querySelector('input[type="file"]');
 const dragAndDrop = document.querySelector('.drag-and-drop');
-const dragTitle = document.querySelector(".drag-and-drop .drag-and-drop-title");
+const dragTitle = document.querySelector('.drag-and-drop-title');
+const files = document.querySelector('.files');
+
 /* Variables globales */
 let file = [];
 
 /* Envio de Formulario */
-document.querySelector("form").addEventListener("submit", function (e) {
-  if (file.length == 0) return;
+document.querySelector("form").addEventListener("submit", function (e) {  
   e.preventDefault();
   e.stopPropagation();
+
+  if (file.length == 0){
+    createToast(`<i class="fa-solid fa-exclamation-triangle"></i>`, "No has seleccionado ningun archivo", "Por favor, selecciona un archivo para subir");
+    return;
+  }
 
   // Recorremos los archivos y los volvemos a subir
   file.forEach(element => {
@@ -42,6 +48,8 @@ dragAndDrop.addEventListener("drop", function (e) {
   console.log("Arr File = ", file);
   draw();
 
+  if(file.length > 0) createToast(`<i class="fa-solid fa-file"></i>`, "Se han cargado tus archivos", "Los archivos se han cargado correctamente");
+
   dragTitle.innerHTML = "Arrastra Tus Archivos AQUI";
 });
 
@@ -67,17 +75,28 @@ input.addEventListener("change", function (e) {
     file.push(tempFiles[i]);
   }
   draw();
+
+  if(file.length > 0) createToast(`<i class="fa-solid fa-file"></i>`, "Se han cargado tus archivos", "Los archivos se han cargado correctamente");
+
 })
 
 /* Funciónes Generales */
 
 // Dibujar nombre de archivos
 function draw() {
-  dragAndDrop.innerHTML = "";
-  file.forEach((element, index) => {
-    // Creamos la linea
-    dragAndDrop.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;
+  dragTitle.style.display = "none";
+
+  // Limpiamos el area de archivos
+  files.innerHTML = "";
+
+  // Recorremos el array de archivos
+  file.forEach((element, index) => {    
+    // Escribimos el nombre junto a un icono de borrar el archivo
+    files.innerHTML += `<p onclick="deleteFile(${index})" id="file_${index}" class="file_line">${element.name} - <span class="icon_delete"><i class="fa-solid fa-trash-can"></i></span></p>`;
   })
+
+  // Si no quedan archivos volvemos a mostrar el titulo
+  if(file.length == 0) dragTitle.style.display = "block";    
 }
 
 // Podemos borrar un fila del array
@@ -88,9 +107,7 @@ function deleteFile(fileId) {
   })
   console.log(file);
   draw();
-
-  // Si todos se han borrado deberiamos vovler a poner el texto
-  // if(!file) dragTitle.innerHTML = "Arrastra Tus Archivos AQUI";
+  createToast(`<i class="fa-solid fa-trash"></i>`, "Has eliminado el archivo", "El archivo ha sido eliminado correctamente");
 }
 
 /* Subir imagenes a Google Drive */
@@ -136,7 +153,7 @@ function insertFile(fileData, callback) {
     });
     if (!callback) {
       callback = function (file) {
-        console.log(file)
+        createToast(`<i class="fa-solid fa-arrow-up-from-line"></i>`, `Se ha subido tu archivo`, `El archivo ${fileData.fileName || fileData.name} se ha subido correctamente a tu cuenta de google drive` );
       };
     }
     request.execute(callback);
