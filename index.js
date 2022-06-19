@@ -8,10 +8,14 @@ const files = document.querySelector('.files');
 let file = [];
 
 /* Envio de Formulario */
-document.querySelector("form").addEventListener("submit", function (e) {
-  if (file.length == 0) return;
+document.querySelector("form").addEventListener("submit", function (e) {  
   e.preventDefault();
   e.stopPropagation();
+
+  if (file.length == 0){
+    createToast(`<i class="fa-solid fa-exclamation-triangle"></i>`, "No has seleccionado ningun archivo", "Por favor, selecciona un archivo para subir");
+    return;
+  }
 
   // Recorremos los archivos y los volvemos a subir
   file.forEach(element => {
@@ -44,6 +48,8 @@ dragAndDrop.addEventListener("drop", function (e) {
   console.log("Arr File = ", file);
   draw();
 
+  if(file.length > 0) createToast(`<i class="fa-solid fa-file"></i>`, "Se han cargado tus archivos", "Los archivos se han cargado correctamente");
+
   dragTitle.innerHTML = "Arrastra Tus Archivos AQUI";
 });
 
@@ -69,6 +75,9 @@ input.addEventListener("change", function (e) {
     file.push(tempFiles[i]);
   }
   draw();
+
+  if(file.length > 0) createToast(`<i class="fa-solid fa-file"></i>`, "Se han cargado tus archivos", "Los archivos se han cargado correctamente");
+
 })
 
 /* Funciónes Generales */
@@ -87,8 +96,7 @@ function draw() {
   })
 
   // Si no quedan archivos volvemos a mostrar el titulo
-  if(file.length == 0) dragTitle.style.display = "block";
-
+  if(file.length == 0) dragTitle.style.display = "block";    
 }
 
 // Podemos borrar un fila del array
@@ -99,9 +107,7 @@ function deleteFile(fileId) {
   })
   console.log(file);
   draw();
-
-  // Si todos se han borrado deberiamos vovler a poner el texto
-  // if(!file) dragTitle.innerHTML = "Arrastra Tus Archivos AQUI";
+  createToast(`<i class="fa-solid fa-trash"></i>`, "Has eliminado el archivo", "El archivo ha sido eliminado correctamente");
 }
 
 /* Subir imagenes a Google Drive */
@@ -147,7 +153,7 @@ function insertFile(fileData, callback) {
     });
     if (!callback) {
       callback = function (file) {
-        console.log(file)
+        createToast(`<i class="fa-solid fa-arrow-up-from-line"></i>`, `Se ha subido tu archivo`, `El archivo ${fileData.fileName || fileData.name} se ha subido correctamente a tu cuenta de google drive` );
       };
     }
     request.execute(callback);

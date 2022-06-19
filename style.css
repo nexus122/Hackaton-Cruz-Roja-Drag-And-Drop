@@ -56,3 +56,35 @@ main{
     padding: 1em;
     overflow: auto;
 }
+
+/* Lugar donde se escriben los toast */
+.toast_space{
+    display: block;    
+    width: 350px;
+    min-height: 300px;
+    max-height: 100vh;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/* Sobrescribir estilos de Bootstrap */
+
+/* Header del toast mejor distribuido */
+.toast-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Boton de cierre redondito */
+button.ml-2.mb-1.close {
+    border: 1px solid black;
+    border-radius: 1em;
+}
+
+/* Hacemos las tarjetas mas legibles */
+.toast-body {
+    background: white;
+    color: black;
+}

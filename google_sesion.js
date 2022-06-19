@@ -36,8 +36,6 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
-        // listFiles(); // Aqui si tienes sesion iniciada o entras pasa algo
-        // uploadImage();
     } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
@@ -47,11 +45,11 @@ function updateSigninStatus(isSignedIn) {
 
 function handleAuthClick(event) {
     gapi.auth2.getAuthInstance().signIn();
+    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 }
 
-function handleSignoutClick(event) {
-    console.log("Salimos de google")
-    gapi.auth2.getAuthInstance().signOut();
+function handleSignoutClick(event) {    
+    gapi.auth2.getAuthInstance().signOut();    
 }
 
 function appendPre(message) {
