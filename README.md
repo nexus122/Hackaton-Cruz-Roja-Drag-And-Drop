@@ -16,12 +16,7 @@ Proyecto para crear una web App que permita subir de manera rapida documentos a 
 
 ## 🐛 Bugs
 - Al borrar todos los elementos, el ultimo click abre el input.
-- Error al enviar el form sin nada
 
-## ✔️ Tareas:
-- [ ] Modificar la interfaz para que al borrar todo vuelva a la "normalidad".
-- [ ] Crear mensajes temporales.
-  - [ ] Introducir Archivos.
-  - [ ] Eliminar Archivos.
-  - [ ] Subir Archivos.
-  - [ ] Archivo no valido.
+## Tecnologia
+En este caso solo se me permitia utilizar Javascript, pero es perfecta para esta tarea, quizas se hubiera complicado todo a la hora de añadir un framework.
+Tal vez el uso de jquery me hubiera facilitado algunas cosas, pero en general estoy contento con la tecnologia.
