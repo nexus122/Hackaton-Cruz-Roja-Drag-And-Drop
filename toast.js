@@ -27,7 +27,7 @@ function createToast(icon, title, message) {
     }, 3000);
 
     // Borrar el toast haciendo click
-    document.querySelector(`#${toastID} button`).addEventListener("click", function (e) {      
+    document.querySelector(`#${toastID} button`).addEventListener("click", function (e) {
         console.log("toastID: ", toastID);
         e.stopPropagation();
         e.preventDefault();
@@ -35,4 +35,4 @@ function createToast(icon, title, message) {
     });
 
 
-};
+}

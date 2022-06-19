@@ -123,7 +123,7 @@ function insertFile(fileData, callback) {
     reader.readAsBinaryString(fileData);
   } catch (e) { }
 
-  reader.onload = function (e) {
+  reader.onload = function () {
     let contentType = fileData.type || 'application/octet-stream';
     let metadata = {
       'title': fileData.fileName || fileData.name,
@@ -152,7 +152,7 @@ function insertFile(fileData, callback) {
       'body': multipartRequestBody
     });
     if (!callback) {
-      callback = function (file) {
+      callback = function () {
         createToast(`<i class="fa-solid fa-arrow-up-from-line"></i>`, `Se ha subido tu archivo`, `El archivo ${fileData.fileName || fileData.name} se ha subido correctamente a tu cuenta de google drive` );
       };
     }
